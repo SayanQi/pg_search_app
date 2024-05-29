@@ -1,0 +1,42 @@
+<%= form_tag(car_parks_path, method: :get) do %>
+        <div class="d-flex">
+          <%= text_field_tag(:q, params[:q], placeholder: "Search...", class: "form-control mx-1") %>
+          <%= submit_tag "Filter", class: "btn primary-button btn-sm mx-2"%>
+        </div>
+<% end %>
+<table class="table table-responsive holiday-table table-borderles" id="">
+  <thead>
+    <tr>
+      <th id="head-sl" >Sl No</th>
+      <th id="head-name" >
+        Name
+      </th>
+      <th id="head-prov" >
+        Provider
+      </th>
+      <th id="head-address" > 
+        Address
+      </th >
+    </tr>
+  </thead>
+  <% if @car_parks.present? %>
+  <tbody id="all_car_parks">
+    <% @car_parks.each_with_index do |car_park, index| %>
+      <%= turbo_frame_tag "car_park_#{car_park.id}" do %>
+        <%= content_tag :tr, id: dom_id(car_park) do %>
+          <td><%= index+1 %></td>
+          <td>
+            <%= car_park.name %>
+          </td>
+          <td>
+            <%= DataProvider.find(car_park.data_provider_id).name%>
+          </td>
+          <td><%= car_park.address %></td>
+        <% end %>
+      <% end %>  
+    <% end %>
+  </tbody> 
+  <% else %>
+    <h4 class="text-center">Nothing to show...</h4>
+  <% end %>  
+</table>
